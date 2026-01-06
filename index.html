@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>요세미티 + 옐로우스톤 여행 일정</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1, h2 { text-align: center; }
+        .tab { overflow: hidden; border: 1px solid #ccc; background-color: #f1f1f1; }
+        .tab button { background-color: inherit; float: left; border: none; outline: none; cursor: pointer; padding: 14px 16px; transition: 0.3s; }
+        .tab button:hover { background-color: #ddd; }
+        .tab button.active { background-color: #ccc; }
+        .tabcontent { display: none; padding: 6px 12px; border: 1px solid #ccc; border-top: none; }
+        #yosemiteMap, #yellowstoneMap { height: 400px; width: 100%; }
+        .accordion { background-color: #eee; color: #444; cursor: pointer; padding: 18px; width: 100%; border: none; text-align: left; outline: none; font-size: 15px; transition: 0.4s; }
+        .active, .accordion:hover { background-color: #ccc; }
+        .panel { padding: 0 18px; display: none; background-color: white; overflow: hidden; }
+        .attraction { margin-bottom: 20px; }
+        .attraction iframe { width: 100%; height: 315px; }
+    </style>
+</head>
+<body>
+    <h1>요세미티 + 옐로우스톤 여행 일정 (2026-09-21 ~ 2026-09-27)</h1>
+    <p>인원: 5인 (부모님 60~70대 포함) | 코스: 요세미티 (2박, Yosemite Valley Lodge 기준) + 옐로우스톤 (2박, West Yellowstone Visitor Information Center 기준)</p>
+    <p>항공: 09/21 ICN 16:00 → SFO 11:00 | 09/26 SFO 13:00 → 09/27 ICN 18:00</p>
+
+    <h2>인터랙티브 지도</h2>
+    <div class="tab">
+        <button class="tablinks" onclick="openMap(event, 'Yosemite')" id="defaultOpen">요세미티 지도</button>
+        <button class="tablinks" onclick="openMap(event, 'Yellowstone')">옐로우스톤 지도</button>
+    </div>
+    <div id="Yosemite" class="tabcontent">
+        <div id="yosemiteMap"></div>
+    </div>
+    <div id="Yellowstone" class="tabcontent">
+        <div id="yellowstoneMap"></div>
+    </div>
+
+    <h2>일자별 일정</h2>
+    <button class="accordion">09/21(월) - SFO 도착 및 요세미티 이동</button>
+    <div class="panel">
+        <p>11:00 SFO 도착</p>
+        <p>11:00~13:30 점심</p>
+        <p>13:30~19:30 Tunnel View 일몰 감상</p>
+        <p>20:00 저녁 및 휴식 (Yosemite Valley Lodge 체크인)</p>
+    </div>
+    <button class="accordion">09/22(화) - 요세미티 탐방</button>
+    <div class="panel">
+        <p>08:30 기상/조식</p>
+        <p>09:00 Yosemite Valley Loop 드라이브</p>
+        <p>10:00 Bridalveil Fall</p>
+        <p>11:00 El Capitan Meadow</p>
+        <p>12:30 점심 (Yosemite Village)</p>
+        <p>13:30~16:00 Mist Trail 트래킹</p>
+        <p>17:00 Glacier Point</p>
+        <p>18:30 숙소 복귀, 저녁</p>
+    </div>
+    <button class="accordion">09/23(수) - 요세미티 → 옐로우스톤 이동</button>
+    <div class="panel">
+        <p>07:30 요세미티 출발</p>
+        <p>11:30 FAT 도착, 렌트카 반납</p>
+        <p>12:55 FAT → SLC 15:37 SLC 도착</p>
+        <p>16:00 렌트카 픽업</p>
+        <p>16:30~21:30 SLC → West Yellowstone 이동</p>
+        <p>22:00 숙소 도착 (West Yellowstone Visitor Information Center 기준)</p>
+    </div>
+    <button class="accordion">09/24(목) - 옐로우스톤 탐방</button>
+    <div class="panel">
+        <p>08:30 출발</p>
+        <p>09:30 Old Faithful</p>
+        <p>11:30 Grand Prismatic Spring</p>
+        <p>13:00 점심</p>
+        <p>14:00~16:30 Fairy Falls 트래킹</p>
+        <p>17:30 Hayden Valley</p>
+        <p>19:00 숙소 복귀, 저녁</p>
+    </div>
+    <button class="accordion">09/25(금) - 옐로우스톤 → 샌프란시스코 이동</button>
+    <div class="panel">
+        <p>06:30 숙소 출발</p>
+        <p>10:00 SLC 공항 도착</p>
+        <p>11:20 SLC → SFO 12:30 SFO 도착</p>
+        <p>13:30 호텔 이동 및 체크인</p>
+        <p>15:00 Fisherman's Wharf 산책</p>
+        <p>18:30 저녁</p>
+    </div>
+    <button class="accordion">09/26(토) - 귀국</button>
+    <div class="panel">
+        <p>09:00 호텔 체크아웃</p>
+        <p>10:30 SFO 이동</p>
+        <p>13:00 SFO 출발 (국제선)</p>
+    </div>
+
+    <h2>주요 관광지 상세 설명</h2>
+    <div class="attraction">
+        <h3>Tunnel View (요세미티)</h3>
+        <p>요세미티 전경을 한눈에 보는 대표 전망대</p>
+        <iframe
+            src="https://www.youtube-nocookie.com/embed/mBJ784aatiU?rel=0"
+            title="YouTube video player"
+            frameborder="0"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+        </iframe>
+    </div>
+    <div class="attraction">
+        <h3>Bridalveil Fall (요세미티)</h3>
+        <p>주차장에서 바로 접근 가능한 폭포</p>
+        <iframe
+            src="https://www.youtube-nocookie.com/embed/i9d1nvkEEXw?rel=0"
+            title="YouTube video player"
+            frameborder="0"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+        </iframe>
+    </div>
+    <div class="attraction">
+        <h3>El Capitan Meadow (요세미티)</h3>
+        <p>세계적인 암벽 절벽 감상 포인트</p>
+        <iframe
+            src="https://www.youtube-nocookie.com/embed/hlcresG-i1g?rel=0"
+            title="YouTube video player"
+            frameborder="0"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+        </iframe>
+    </div>
+    <div class="attraction">
+        <h3>Glacier Point (요세미티)</h3>
+        <p>하프돔과 요세미티 밸리를 내려다보는 최고 전망대</p>
+        <iframe
+            src="https://www.youtube-nocookie.com/embed/hVBs2kjA5qU?rel=0"
+            title="YouTube video player"
+            frameborder="0"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+        </iframe>
+    </div>
+    <div class="attraction">
+        <h3>Mist Trail (요세미티)</h3>
+        <p>베르날·네바다 폭포를 잇는 요세미티 대표 트래킹 코스</p>
+        <iframe
+            src="https://www.youtube-nocookie.com/embed/3Kdh6nrZI0U?rel=0"
+            title="YouTube video player"
+            frameborder="0"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+        </iframe>
+    </div>
+    <div class="attraction">
+        <h3>Old Faithful (옐로우스톤)</h3>
+        <p>일정한 주기로 분출하는 세계적으로 유명한 간헐천</p>
+        <iframe
+            src="https://www.youtube-nocookie.com/embed/7gQphez0jeY?rel=0"
+            title="YouTube video player"
+            frameborder="0"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+        </iframe>
+    </div>
+    <div class="attraction">
+        <h3>Grand Prismatic Spring (옐로우스톤)</h3>
+        <p>옐로우스톤 최대 규모의 컬러풀한 온천</p>
+        <iframe
+            src="https://www.youtube-nocookie.com/embed/6VTW5VuKT0s?rel=0"
+            title="YouTube video player"
+            frameborder="0"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+        </iframe>
+    </div>
+    <div class="attraction">
+        <h3>Fairy Falls (옐로우스톤)</h3>
+        <p>숲과 초원을 지나는 대표 트래킹 코스</p>
+        <iframe
+            src="https://www.youtube-nocookie.com/embed/ZvYETO5_bbU?rel=0"
+            title="YouTube video player"
+            frameborder="0"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+        </iframe>
+    </div>
+    <div class="attraction">
+        <h3>Hayden Valley (옐로우스톤)</h3>
+        <p>들소·엘크 등 야생동물 관찰 명소</p>
+        <iframe
+            src="https://www.youtube-nocookie.com/embed/DNLprrtxzHA?rel=0"
+            title="YouTube video player"
+            frameborder="0"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+        </iframe>
+    </div>
+
+    <script>
+        var yosemiteMap, yellowstoneMap;
+
+        // 탭 기능 (evt 없어도 동작 + 탭 전환 시 invalidateSize)
+        function openMap(evt, mapName) {
+            var i, tabcontent, tablinks;
+
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            document.getElementById(mapName).style.display = "block";
+
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.className += " active";
+            } else {
+                var btn = document.querySelector('.tab button[onclick*="' + mapName + '"]');
+                if (btn) btn.className += " active";
+            }
+
+            if (mapName === 'Yosemite' && yosemiteMap) {
+                setTimeout(function () { yosemiteMap.invalidateSize(); }, 50);
+            } else if (mapName === 'Yellowstone' && yellowstoneMap) {
+                setTimeout(function () { yellowstoneMap.invalidateSize(); }, 50);
+            }
+        }
+
+        // 아코디언 기능
+        var acc = document.getElementsByClassName("accordion");
+        for (var i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                panel.style.display = (panel.style.display === "block") ? "none" : "block";
+            });
+        }
+
+        // ✅ 초기 로드: 탭을 먼저 보여준 다음 지도 생성 + invalidateSize
+        function initMaps() {
+            if (typeof L === 'undefined') {
+                setTimeout(initMaps, 100);
+                return;
+            }
+            // 1) 기본 탭(요세미티) 먼저 표시
+            openMap(null, 'Yosemite');
+
+            // 2) 지도 생성 (OSM 타일: 배경 안 뜨는 문제 방지)
+            yosemiteMap = L.map('yosemiteMap').setView([37.8651, -119.5383], 11);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(yosemiteMap);
+
+            yellowstoneMap = L.map('yellowstoneMap').setView([44.4280, -110.5885], 10);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(yellowstoneMap);
+
+            // 3) 마커들 (유튜브: nocookie + allow 속성 포함)
+            L.marker([37.7154, -119.6769]).addTo(yosemiteMap)
+                .bindPopup(
+                    '<b>Tunnel View</b><br>요세미티 전경을 한눈에 보는 대표 전망대<br>' +
+                    '<iframe width="300" height="169" ' +
+                    'src="https://www.youtube-nocookie.com/embed/mBJ784aatiU?rel=0" ' +
+                    'title="YouTube video player" frameborder="0" loading="lazy" ' +
+                    'referrerpolicy="strict-origin-when-cross-origin" ' +
+                    'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+                    'allowfullscreen></iframe>'
+                );
+
+            L.marker([37.716753, -119.646505]).addTo(yosemiteMap)
+                .bindPopup(
+                    '<b>Bridalveil Fall</b><br>주차장에서 바로 접근 가능한 폭포<br>' +
+                    '<iframe width="300" height="169" ' +
+                    'src="https://www.youtube-nocookie.com/embed/i9d1nvkEEXw?rel=0" ' +
+                    'title="YouTube video player" frameborder="0" loading="lazy" ' +
+                    'referrerpolicy="strict-origin-when-cross-origin" ' +
+                    'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+                    'allowfullscreen></iframe>'
+                );
+
+            L.marker([37.7240, -119.6314]).addTo(yosemiteMap)
+                .bindPopup(
+                    '<b>El Capitan Meadow</b><br>세계적인 암벽 절벽 감상 포인트<br>' +
+                    '<iframe width="300" height="169" ' +
+                    'src="https://www.youtube-nocookie.com/embed/hlcresG-i1g?rel=0" ' +
+                    'title="YouTube video player" frameborder="0" loading="lazy" ' +
+                    'referrerpolicy="strict-origin-when-cross-origin" ' +
+                    'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+                    'allowfullscreen></iframe>'
+                );
+
+            L.marker([37.730576, -119.573629]).addTo(yosemiteMap)
+                .bindPopup(
+                    '<b>Glacier Point</b><br>하프돔과 요세미티 밸리를 내려다보는 최고 전망대<br>' +
+                    '<iframe width="300" height="169" ' +
+                    'src="https://www.youtube-nocookie.com/embed/hVBs2kjA5qU?rel=0" ' +
+                    'title="YouTube video player" frameborder="0" loading="lazy" ' +
+                    'referrerpolicy="strict-origin-when-cross-origin" ' +
+                    'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+                    'allowfullscreen></iframe>'
+                );
+
+            L.marker([37.732760, -119.557820]).addTo(yosemiteMap)
+                .bindPopup(
+                    '<b>Mist Trail</b><br>베르날·네바다 폭포를 잇는 요세미티 대표 트래킹 코스<br>' +
+                    '<iframe width="300" height="169" ' +
+                    'src="https://www.youtube-nocookie.com/embed/3Kdh6nrZI0U?rel=0" ' +
+                    'title="YouTube video player" frameborder="0" loading="lazy" ' +
+                    'referrerpolicy="strict-origin-when-cross-origin" ' +
+                    'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+                    'allowfullscreen></iframe>'
+                );
+
+            L.marker([37.743153, -119.598122]).addTo(yosemiteMap)
+                .bindPopup('<b>Yosemite Valley Lodge (숙소)</b>');
+
+            L.marker([37.615223, -122.389977]).addTo(yosemiteMap)
+                .bindPopup('<b>SFO 공항</b>');
+
+            L.marker([36.776194, -119.718140]).addTo(yosemiteMap)
+                .bindPopup('<b>FAT 공항</b>');
+
+            L.marker([44.460438, -110.828377]).addTo(yellowstoneMap)
+                .bindPopup(
+                    '<b>Old Faithful</b><br>일정한 주기로 분출하는 세계적으로 유명한 간헐천<br>' +
+                    '<iframe width="300" height="169" ' +
+                    'src="https://www.youtube-nocookie.com/embed/7gQphez0jeY?rel=0" ' +
+                    'title="YouTube video player" frameborder="0" loading="lazy" ' +
+                    'referrerpolicy="strict-origin-when-cross-origin" ' +
+                    'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+                    'allowfullscreen></iframe>'
+                );
+
+            L.marker([44.52505, -110.8382]).addTo(yellowstoneMap)
+                .bindPopup(
+                    '<b>Grand Prismatic Spring</b><br>옐로우스톤 최대 규모의 컬러풀한 온천<br>' +
+                    '<iframe width="300" height="169" ' +
+                    'src="https://www.youtube-nocookie.com/embed/6VTW5VuKT0s?rel=0" ' +
+                    'title="YouTube video player" frameborder="0" loading="lazy" ' +
+                    'referrerpolicy="strict-origin-when-cross-origin" ' +
+                    'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+                    'allowfullscreen></iframe>'
+                );
+
+            L.marker([44.51434, -110.83184]).addTo(yellowstoneMap)
+                .bindPopup(
+                    '<b>Fairy Falls</b><br>숲과 초원을 지나는 대표 트래킹 코스<br>' +
+                    '<iframe width="300" height="169" ' +
+                    'src="https://www.youtube-nocookie.com/embed/ZvYETO5_bbU?rel=0" ' +
+                    'title="YouTube video player" frameborder="0" loading="lazy" ' +
+                    'referrerpolicy="strict-origin-when-cross-origin" ' +
+                    'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+                    'allowfullscreen></iframe>'
+                );
+
+            L.marker([44.6397, -110.4533]).addTo(yellowstoneMap)
+                .bindPopup(
+                    '<b>Hayden Valley</b><br>들소·엘크 등 야생동물 관찰 명소<br>' +
+                    '<iframe width="300" height="169" ' +
+                    'src="https://www.youtube-nocookie.com/embed/DNLprrtxzHA?rel=0" ' +
+                    'title="YouTube video player" frameborder="0" loading="lazy" ' +
+                    'referrerpolicy="strict-origin-when-cross-origin" ' +
+                    'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+                    'allowfullscreen></iframe>'
+                );
+
+            L.marker([44.6625, -111.1047]).addTo(yellowstoneMap)
+                .bindPopup('<b>West Yellowstone Visitor Information Center (숙소 기준)</b>');
+
+            L.marker([40.78833, -111.97778]).addTo(yellowstoneMap)
+                .bindPopup('<b>SLC 공항</b>');
+
+            L.marker([37.80833, -122.41556]).addTo(yellowstoneMap)
+                .bindPopup('<b>Fisherman&#39;s Wharf</b>');
+
+            // 4) 첫 화면 강제 리사이즈 (핵심)
+            setTimeout(function () {
+                yosemiteMap.invalidateSize();
+            }, 50);
+        }
+
+        // 페이지 로드 완료 후 지도 초기화
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMaps);
+        } else {
+            initMaps();
+        }
+    </script>
+</body>
+</html>
